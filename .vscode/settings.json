@@ -1,0 +1,25 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "c:\\Users\\tom_s\\Desktop\\HPP\\legemap",
+            "binaryPath": "c:\\Users\\tom_s\\Desktop\\HPP\\legemap\\bucket_sort",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "c:\\Users\\tom_s\\Desktop\\HPP\\legemap",
+            "binaryPath": "c:\\Users\\tom_s\\Desktop\\HPP\\legemap\\test",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "c:\\Users\\tom_s\\Desktop\\HPP\\github\\HPP_bucketsort",
+            "binaryPath": "c:\\Users\\tom_s\\Desktop\\HPP\\github\\HPP_bucketsort\\test",
+            "binaryArgs": []
+        }
+    ],
+    "files.associations": {
+        "vector": "cpp",
+        "iostream": "cpp",
+        "cmath": "cpp"
+    }
+}
