@@ -5,11 +5,19 @@
 #include <cmath>
 using namespace std;
  
+#include <chrono>
+using namespace std::chrono;
+
 // Function to sort arr[] of
 // size n using bucket sort
-vector<int> bucketSort()
+vector<int> rbucketSort()
 {
-    vector<int> items{1,64,420,900,5,5};
+    int size = 10;
+    int maxDigits = 10;
+    vector<int> items(size);
+    for (int i = 0; i < size; i++){
+        items[i] =  (rand() % maxDigits);
+     }
 
     // vector<int> items{166,64,1,69};
 
@@ -43,13 +51,38 @@ vector<int> bucketSort()
     return items;
 }
 
-/* Driver program to test above function */
+// Functie om de gemiddelde runtime van de functie te meten
+double measureAverageRuntime(int numRuns)
+{
+  double totalTime = 0.0;
+
+  for (int i = 0; i < numRuns; i++) {
+    // Start de timer
+    auto start = chrono::high_resolution_clock::now();
+
+    // Roep de functie aan die we willen meten
+    rbucketSort();
+
+    // Stop de timer en meet de tijdsduur
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> duration = end - start;
+
+    // Voeg de tijdsduur toe aan de totale tijd
+    totalTime += duration.count();
+  }
+
+  // Bereken en retourneer de gemiddelde tijdsduur
+  return totalTime / numRuns;
+}
+
+
 int main()
 {
-    cout <<"working....\n";
-    vector<int> a = bucketSort(); 
-    cout << "Sorted array is \n";
-    for (int i = 0; i < 6; i++)
-        cout << a[i] << " ";
-    return 0;
+  int numRuns = 10; // Pas het aantal uit te voeren runs aan indien nodig
+  double avgRuntime = measureAverageRuntime(numRuns);
+
+  cout << "Gemiddelde runtime over " << numRuns << " runs: " << avgRuntime << " seconden" << endl;
+
+  return 0;
 }
+
