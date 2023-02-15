@@ -76,7 +76,7 @@ double measureAverageRuntime(int numRuns)
 }
 
 
-int main()
+int rmain()
 {
   int numRuns = 10; // Pas het aantal uit te voeren runs aan indien nodig
   double avgRuntime = measureAverageRuntime(numRuns);
