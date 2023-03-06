@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <thread>
 
 using namespace std;
 
@@ -55,9 +56,16 @@ void mergeSort(vector<int>& arr, int l, int r) {
     // splitting 
     if (l < r) {
         int m = l + (r - l) / 2;
-        // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
+        // Call mergesort agai (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
+        // int threshold = 8;
+        // if ((r - l + 1)/(sizeof(arr) / sizeof(arr[0])) < threshold) {
+        //     // If the number of elements is below the threshold, sort sequentially
+        //     sort(arr.begin() + l, arr.begin() + r + 1);
+        // } else {
+        thread t1(mergeSort, ref(arr), l, m);
+        thread t2(mergeSort, ref(arr), m + 1, r);
+        t1.join();
+        t2.join();
         // Call merge function 
         merge(arr, l, m, r);
     }

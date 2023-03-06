@@ -7,7 +7,7 @@ using namespace std;
  
 // Function to sort arr[] of
 // size n using bucket sort
-vector<int> nbucketSort()
+vector<int> nbucketSort()  
 {
     vector<int> items{1,64,420,900,5,5};
 
