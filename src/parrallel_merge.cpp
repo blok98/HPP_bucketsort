@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <cmath>
 
 using namespace std;
 
@@ -56,18 +57,24 @@ void mergeSort(vector<int>& arr, int l, int r) {
     // splitting 
     if (l < r) {
         int m = l + (r - l) / 2;
-        // Call mergesort agai (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
-        // int threshold = 8;
-        // if ((r - l + 1)/(sizeof(arr) / sizeof(arr[0])) < threshold) {
-        //     // If the number of elements is below the threshold, sort sequentially
-        //     sort(arr.begin() + l, arr.begin() + r + 1);
-        // } else {
-        thread t1(mergeSort, ref(arr), l, m);
-        thread t2(mergeSort, ref(arr), m + 1, r);
-        t1.join();
-        t2.join();
+        // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
+        int threshold = 8;
+        double factor_subarray = (r - l + 1)/(sizeof(arr) / sizeof(arr[0]));
+        if (pow(2, log2(1/factor_subarray) + 1) - 2 <= threshold) {
+            // If the number of elements is below the threshold, sort sequentially
+            thread t1(mergeSort, ref(arr), l, m);
+            thread t2(mergeSort, ref(arr), m + 1, r);
+            t1.join();
+            t2.join();
+            // Call merge function 
+            merge(arr, l, m, r);
+        } else {
+        // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
         // Call merge function 
         merge(arr, l, m, r);
+        }
     }
 }
 
