@@ -58,17 +58,19 @@ void mergeSort(vector<int>& arr, int l, int r) {
     if (l < r) {
         int m = l + (r - l) / 2;
         // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
-        int threshold = 8;
-        double factor_subarray = (r - l + 1)/(sizeof(arr) / sizeof(arr[0]));
-        if (pow(2, log2(1/factor_subarray) + 1) - 2 <= threshold) {
+        int threshold = 2; //this represents the amount of threads being used
+        double factor_subarray = (double)arr.size()/(r - l + 1); // sizeof(arr) is multiplied by 1.0 to avoid integer division
+        // cout << (pow(2, log2(1/factor_subarray) + 1) - 2) << "\n";
+ 
+        if (factor_subarray <= threshold) {
             // If the number of elements is below the threshold, sort sequentially
-            thread t1(mergeSort, ref(arr), l, m);
-            thread t2(mergeSort, ref(arr), m + 1, r);
+            thread t1(mergeSort, ref(arr), l, m); // The left array is passed in a thread to avoid waiting for the sequential task for the second array.
+            mergeSort(arr, m + 1, r);      
             t1.join();
-            t2.join();
             // Call merge function 
             merge(arr, l, m, r);
         } else {
+        
         // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
         mergeSort(arr, l, m);
         mergeSort(arr, m + 1, r);

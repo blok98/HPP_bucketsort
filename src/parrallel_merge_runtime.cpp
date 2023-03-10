@@ -58,17 +58,19 @@ void rmergeSort(vector<int>& arr, int l, int r) {
     if (l < r) {
         int m = l + (r - l) / 2;
         // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
-        int threshold = 8;
-        double factor_subarray = (r - l + 1)/(sizeof(arr) / sizeof(arr[0]));
-        if (pow(2, log2(1/factor_subarray) + 1) - 2 <= threshold) {
+        int threshold = 8; //this represents the amount of threads being used
+        double factor_subarray = (double)arr.size()/(r - l + 1); // sizeof(arr) is multiplied by 1.0 to avoid integer division
+ 
+        if (factor_subarray <= threshold) {
+            // cout << factor_subarray;
             // If the number of elements is below the threshold, sort sequentially
-            thread t1(rmergeSort, ref(arr), l, m);
-            thread t2(rmergeSort, ref(arr), m + 1, r);
+            thread t1(rmergeSort, ref(arr), l, m); // The left array is passed in a thread to avoid waiting for the sequential task for the second array.
+            rmergeSort(arr, m + 1, r);      
             t1.join();
-            t2.join();
             // Call merge function 
             rmerge(arr, l, m, r);
         } else {
+        
         // Call mergesort again (recursively) on left and right array, until only one element is left. (The original arr will be changed cause of &)
         rmergeSort(arr, l, m);
         rmergeSort(arr, m + 1, r);
@@ -89,8 +91,8 @@ double measureAverageRuntime(int numRuns)
     auto start = chrono::high_resolution_clock::now();
 
     // Roep de functie aan die we willen meten
-    int size = 100;
-    int maxDigits = 10;
+    int size = 100000;
+    int maxDigits = 100;
     vector<int> arr(size);
     for (int i = 0; i < size; i++){
         arr[i] =  (rand() % maxDigits);
