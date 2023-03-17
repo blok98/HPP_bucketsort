@@ -43,6 +43,6 @@ int main(int argc, char *argv[])
 
     cout << endl << "Sum is " << totalSum << endl << endl;
     double end = omp_get_wtime();
-    cout << "runtime: << (end - start) << " sec" << endl;
+    cout << "runtime = " << (end - start) << " sec" << endl;
     return 0;
 }
