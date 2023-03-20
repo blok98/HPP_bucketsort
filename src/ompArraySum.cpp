@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
     const char* inputFile = argv[1];
     const int numThreads = atoi(argv[2]);
     int totalSum = 0;
-
     ifstream in(inputFile);
 
     int n;
@@ -26,6 +25,7 @@ int main(int argc, char *argv[])
     #pragma omp parallel num_threads(numThreads) reduction(+:totalSum)
     {
         int myId = omp_get_thread_num();
+        cout <<myId;
         int myFirst = myId * (n / numThreads);
         int myLast = (myId == numThreads-1) ? (n-1) : (myFirst + (n / numThreads) - 1);
         int mySum = 0;
