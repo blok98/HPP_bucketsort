@@ -11,12 +11,10 @@ using namespace chrono;
 
 vector<bool>* zeef(int N, int rank, int size){
     cout << "zeef is executed by process: " << rank << endl;
-    // Bereken het deel van de zeef die dit proces moet doen
-    int chunk_size = (N + size - 1) / size; // afronden naar boven
+    int chunk_size = (N + size - 1) / size; 
     int start_index = rank * chunk_size + 2;
     int end_index = min(start_index + chunk_size, N);
 
-    // Maak de bool vector aan voor dit deel
     vector<bool>* is_prime = new vector<bool>(end_index - start_index, true);
 
     int k=2;
@@ -46,13 +44,12 @@ int main(int argc, char** argv){
 
     auto start_time = high_resolution_clock::now();
 
-    // Bereken deelresultaten op elk proces
     vector<bool>* local_is_prime = zeef(N, rank, size);
 
-    // Combineer de deelresultaten met reduce
+    // Combineer de deelresultaten met reduce (gather)
     vector<bool>* global_is_prime = new vector<bool>(N+1, true);
     MPI_Reduce(local_is_prime, global_is_prime, N+1, MPI_C_BOOL, MPI_LAND, 0, MPI_COMM_WORLD);
-  
+
 
     // Alleen op het masterproces:
     if (rank == 0) {
@@ -60,7 +57,6 @@ int main(int argc, char** argv){
         auto time_diff = duration_cast<milliseconds>(end_time - start_time);
         cout << "Execution time: " << time_diff.count() << " seconds" << endl;
 
-        // Print het resultaat
         for (int i = 0; i <= N; i++) {
             if ((*global_is_prime)[i]) {
                 cout << i << " is prime." << endl;
@@ -68,16 +64,13 @@ int main(int argc, char** argv){
         }
     }
 
-    // Maak het geheugen weer vrij
     delete local_is_prime;
     if (rank == 0) {
         delete global_is_prime;
     }
 
-    // Synchroniseer alle processen voordat MPI_Finalize() wordt aangeroepen
     MPI_Barrier(MPI_COMM_WORLD);
 
-    // Roep MPI_Finalize() aan
     MPI_Finalize();
 
     return 0;}
