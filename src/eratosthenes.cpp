@@ -36,7 +36,7 @@ vector<int> zeef(int N){
 }
 
 int main(){
-    vector<int> a = zeef(10);
+    vector<int> a = zeef(100);
     for (int i = 0; i < a.size(); i++) {
         cout << a[i] << " ";
     }
